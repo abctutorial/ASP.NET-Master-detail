@@ -1,0 +1,85 @@
+﻿
+@model MasterDetailsDemo.Models.MyOrderViewModel
+
+<div>
+    <form id="myForm1">
+        @Html.HiddenFor(m => m.Id)
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Product Name</label>
+            @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", @placeholder = "Name" })
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Quantity</label>
+            @Html.TextBoxFor(model => model.Quantity, new { autocomplete = "off", @class = "form-control", @placeholder = "Address", @id = "txtQuantity1" })
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Price</label>
+            @Html.TextBoxFor(model => model.Price, new { autocomplete = "off", @class = "form-control", @placeholder = "Address", @id = "txtPrice1" })
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail1">Amount</label>
+            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", @placeholder = "Address", @id = "txtAmount1", @readonly = "readonly" })
+        </div>
+        <hr />
+        <a href="#" id="btnSubmit" class="btn btn-success btn-block">
+            <span>Update</span>
+
+        </a>
+
+
+    </form>
+    <div style="text-align:center;display:none" id="loaderDiv1">
+        <img src="~/loadings.gif" width="150" />
+    </div>
+
+</div>
+
+<script>
+
+    $(document).ready(function () {
+
+
+        $("#btnSubmit").click(function () {
+            $("#loaderDiv1").show();
+            var myformdata = $("#myForm1").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/Orders/Index",
+                data: myformdata,
+                success: function () {
+                    alert("Product Updated");
+                    $("#loaderDiv1").hide();
+                    $("#myModal").modal("hide");
+                    window.location.href = "/Orders/Index";
+                },
+                error: function () {
+                    alert("Product Updated")
+                    $("#loaderDiv1").hide();
+                    $("#myModal").modal("hide");
+                    window.location.href = "/Orders/Index";
+                }
+            })
+
+        })
+
+    })
+
+
+    $(document).ready(function () {
+
+        $("#txtQuantity1,#txtPrice1").keyup(function (e) {
+
+            var q = $("#txtQuantity1").val();
+            var p = $("#txtPrice1").val();
+            var result = "";
+
+            if (q !== "" && p !== "" && $.isNumeric(q) && $.isNumeric(p)) {
+                result = parseFloat(q) * parseFloat(p);
+            }
+            $("#txtAmount1").val(result);
+
+        });
+    })
+</script>

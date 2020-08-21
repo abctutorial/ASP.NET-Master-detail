@@ -1,0 +1,95 @@
+﻿
+@model MasterDetailsDemo.Models.MyOrderViewModel
+
+<div>
+
+    <form id="myForm2">
+
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CustomerId)
+
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Product Name</label>
+            @Html.TextBoxFor(model => model.ProductName, new { @class = "form-control", @placeholder = "Product Name" })
+        </div>
+
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Quantity</label>
+            @Html.TextBoxFor(model => model.Quantity, new { autocomplete = "off", @class = "form-control", @placeholder = "Quantity", @id = "txtQuantity2" })
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Price</label>
+            @Html.TextBoxFor(model => model.Price, new { autocomplete = "off", @class = "form-control", @placeholder = "Price", @id = "txtPrice2" })
+        </div>
+
+        <div class="form-group">
+            <label for="exampleInputEmail1">Amount</label>
+            @Html.TextBoxFor(model => model.Amount, new { @class = "form-control", @placeholder = "Amount", @id = "txtAmount2", @readonly = "readonly" })
+        </div>
+        <hr />
+        <a href="#" id="btnSubmit" class="btn btn-success btn-block">
+            <span>Save</span>
+        </a>
+        </form>
+
+    <div style="text-align:center;display:none" id="Loaderdiv2">
+        <img src="~/loadings.gif" width="150" />
+    </div>
+</div>
+
+<script>
+
+
+
+    $(document).ready(function () {
+
+        $("#txtQuantity2,#txtPrice2").keyup(function (e) {
+
+            var q = $("#txtQuantity2").val();
+            var p = $("#txtPrice2").val();
+            var result = "";
+
+            if (q !== "" && p !== "" && $.isNumeric(q) && $.isNumeric(p)) {
+                result = parseFloat(q) * parseFloat(p);
+            }
+            $("#txtAmount2").val(result);
+
+        });
+    })
+
+
+    $(document).ready(function () {
+
+        $("#btnSubmit").click(function () {
+            $("#Loaderdiv2").show();
+            var MyData = $("#myForm2").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "/Orders/AddMoreOrderSave",
+                data: MyData,
+                success: function () {
+                    alert("New Order Added");
+                    $("#Loaderdiv2").hide();
+                    $("#myModal2").modal("hide");
+                    window.location.href="/Orders/Index"
+                },
+                error: function () {
+                    alert("New Order Added");
+                    $("#Loaderdiv2").hide();
+                    $("#myModal2").modal("hide");
+                    window.location.href = "/Orders/Index"
+                }
+
+            })
+        })
+    })
+
+
+
+
+
+</script>
